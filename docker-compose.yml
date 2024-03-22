@@ -1,28 +1,40 @@
 version: '3'
 services:
- web:
-   container_name: "django"
-   build: .
-   command: python3 mysite/manage.py runserver 0.0.0.0:8000
-   working_dir: /code
-   ports:
-     - 8000:8000
-   volumes:
-     - .:/code
-   depends_on:
-     - db
+  web:
+    container_name: "django"
+    build: ./mysite
+    command: python3 mysite/manage.py runserver 0.0.0.0:8000
+    working_dir: /code
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/code
+    depends_on:
+      - db
 
- db:
-   container_name: "mysql"
-   image: mysql
-   restart: always
-   environment:
-    MYSQL_ROOT_PASSWORD: password
-    MYSQL_DATABASE: database
-   volumes:
-     - mysql:/var/lib/mysql
-   ports:
-     - 3306:3306
-     
+  db:
+    container_name: "mysql"
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: database
+    volumes:
+      - mysql:/var/lib/mysql
+    ports:
+      - 3306:3306
+
+  bot:
+    container_name: "bot"
+    build: ./bot
+    command: python3 main.py
+    working_dir: /code/bot
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+    ports:
+      - 8001:8001
+
 volumes:
   mysql:
