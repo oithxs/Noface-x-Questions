@@ -28,5 +28,3 @@ ADD requirements.txt /code/
 RUN pip3 install -r requirements.txt
 ADD . /code/
 EXPOSE 8000
-
-CMD ["python", "mysite/manage.py", "wait_for_db", "&&", "python", "mysite/manage.py", "migrate"]
