@@ -1,20 +1,4 @@
-# version: '3'
 services:
-  web:
-    container_name: "django"
-    build: ./mysite
-    command: >
-      bash -c "python3 mysite/manage.py migrate &&
-      python3 mysite/manage.py runserver 0.0.0.0:8000"
-    working_dir: /code
-    ports:
-      - 8000:8000
-    volumes:
-      - .:/code
-    depends_on:
-      db:
-        condition: service_healthy
-
   db:
     container_name: "mysql"
     image: mysql
