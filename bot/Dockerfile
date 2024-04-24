@@ -9,7 +9,7 @@ ARG GID=1000
 RUN mkdir /usr/src/app
 
 RUN apt-get update && apt-get install -y \
-    sudo nano;
+    sudo nano tzdata;
 
 # Create a group and user
 RUN groupadd -g $GID $GROUPNAME

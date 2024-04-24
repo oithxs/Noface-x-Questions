@@ -7,7 +7,7 @@ ENV TZ="Asia/Tokyo"
 ENV CI true
 
 RUN apt-get update -y -qq && apt-get install -y -qq \
-    sudo nano; \
+    sudo nano tzdata; \
     apt-get clean; \
     rm -rf /var/lib/apt-get/lists/*; \
     usermod -aG sudo node; \
