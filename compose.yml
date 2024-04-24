@@ -1,4 +1,14 @@
 services:
+  api:
+    container_name: "api"
+    build: 
+      context: ./api
+      dockerfile: Dockerfile
+    volumes:
+      - ./api:/usr/src/app
+    ports:
+      - 8080:8080
+
   web:
     container_name: "web"
     build:
