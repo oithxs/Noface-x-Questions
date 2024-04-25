@@ -1,12 +1,11 @@
-FROM python:3.10
+FROM golang:1.22.2
 
-ENV PYTHONUNBUFFERED 1
+WORKDIR /usr/src/app
 
-ARG USERNAME=pyuser
-ARG GROUPNAME=pyuser
+ARG USERNAME=dev
+ARG GROUPNAME=dev
 ARG UID=1000
 ARG GID=1000
-RUN mkdir /usr/src/app
 
 RUN apt-get update && apt-get install -y \
     sudo nano tzdata;
@@ -18,13 +17,17 @@ RUN usermod -aG sudo $USERNAME
 RUN echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 RUN chown -R $USERNAME:$USERNAME /usr/src/app
 
-USER $USERNAME
+COPY go.mod /usr/src/app/
 
-# Install dependencies
-WORKDIR /usr/src/app
-COPY requirements.txt /usr/src/app/
-RUN pip3 install -r requirements.txt
+RUN go get github.com/labstack/echo/v4
+RUN go install github.com/cosmtrek/air@latest
+RUN go mod tidy
 
-EXPOSE 8001
+RUN chown -R $USERNAME:$USERNAME /usr/src/app
+RUN chmod -R 777 /go
 
-CMD ["/bin/bash", "-c", "python3 main.py"]
+USER dev
+
+EXPOSE 8080
+
+CMD ["/bin/bash", "-c", "air"]
