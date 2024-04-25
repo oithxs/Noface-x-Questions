@@ -17,4 +17,17 @@ RUN usermod -aG sudo $USERNAME
 RUN echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 RUN chown -R $USERNAME:$USERNAME /usr/src/app
 
+COPY go.mod /usr/src/app/
+
+RUN go get github.com/labstack/echo/v4
+RUN go install github.com/cosmtrek/air@latest
+RUN go mod tidy
+
+RUN chown -R $USERNAME:$USERNAME /usr/src/app
+RUN chmod -R 777 /go
+
 USER dev
+
+EXPOSE 8080
+
+CMD ["/bin/bash", "-c", "air"]
